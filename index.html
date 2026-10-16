@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #060811; font-family: 'Inter', sans-serif; }
+      #root { width: 100%; height: 100%; position: relative; }
+      .bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 25% 15%, #141c3d 0%, #060811 55%); }
+      .glow { position: absolute; border-radius: 50%; filter: blur(60px); }
+      .g1 { width: 1000px; height: 1000px; background: radial-gradient(circle, rgba(88,101,242,.2), transparent 70%); left: -250px; top: -250px; }
+      .g2 { width: 800px; height: 800px; background: radial-gradient(circle, rgba(250,166,77,.1), transparent 70%); right: -200px; bottom: -250px; }
+      .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; }
+      .dc-blur { position: absolute; top: 70px; left: 90px; display: flex; align-items: center; gap: 20px; opacity: .85; }
+      .dc-logo { width: 64px; height: 64px; border-radius: 18px; background: #5865F2; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 700; color: #fff; font-family: 'Space Grotesk'; }
+      .dc-name { color: #cbd5e1; font-size: 30px; font-weight: 600; }
+      h1 { font-family: 'Space Grotesk', sans-serif; color: #f4f4f5; font-size: 104px; font-weight: 700; letter-spacing: -0.03em; text-align: center; line-height: 1.1; }
+      h2 { font-family: 'Space Grotesk', sans-serif; color: #f4f4f5; font-size: 78px; font-weight: 700; letter-spacing: -0.02em; text-align: center; }
+      .grad { background: linear-gradient(90deg, #a78bfa, #5865F2, #38bdf8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .sub { color: rgb(110,121,137); font-size: 34px; margin-top: 28px; text-align: center; max-width: 1300px; line-height: 1.55; }
+      .mono { font-family: 'JetBrains Mono', monospace; }
+      .kicker { color: #5865F2; font-size: 26px; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 28px; font-weight: 700; }
+      .timer { font-family: 'JetBrains Mono', monospace; font-size: 200px; font-weight: 700; color: #f4f4f5; }
+      .timer .t0 { color: #f87171; text-shadow: 0 0 40px rgba(248,113,113,.5); }
+      /* cards */
+      .cards { display: flex; gap: 34px; margin-top: 56px; }
+      .card { width: 430px; padding: 42px 38px; border-radius: 20px; background: linear-gradient(180deg,#0d1224,#080b18); border: 1px solid rgba(148,163,184,.14); box-shadow: 0 14px 34px rgba(2,8,23,.5); text-align: left; }
+      .card .icon { font-size: 50px; }
+      .card h3 { font-family: 'Space Grotesk'; color: #e2e8f0; font-size: 34px; margin: 16px 0 10px; }
+      .card p { color: rgb(110,121,137); font-size: 23px; line-height: 1.5; }
+      /* metrics */
+      .metrics { display: flex; gap: 70px; margin-top: 60px; }
+      .metric { text-align: center; }
+      .metric .before { color: rgb(110,121,137); font-size: 44px; font-family: 'JetBrains Mono'; text-decoration: line-through; }
+      .metric .after { font-family: 'Space Grotesk'; font-size: 110px; font-weight: 700; color: #34d399; }
+      .metric .arrow { color: #5865F2; font-size: 60px; margin: 0 10px; }
+      .metric .lbl { color: rgb(110,121,137); font-size: 26px; margin-top: 10px; }
+      /* discord chat mock */
+      .chat { width: 1150px; border-radius: 18px; background: #313338; border: 1px solid rgba(255,255,255,.06); box-shadow: 0 24px 60px rgba(2,8,23,.7); text-align: left; overflow: hidden; }
+      .chat .chead { padding: 18px 26px; background: #2b2d31; color: #f2f3f5; font-weight: 600; font-size: 28px; border-bottom: 1px solid rgba(255,255,255,.05); }
+      .chat .cbody { padding: 24px 26px; }
+      .msg { display: flex; gap: 18px; margin-bottom: 22px; }
+      .msg .avatar { width: 58px; height: 58px; border-radius: 50%; background: #5865F2; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 24px; font-family: 'Space Grotesk'; }
+      .msg .name { color: #5865F2; font-weight: 600; font-size: 26px; }
+      .msg .txt { color: #dbdee1; font-size: 26px; margin-top: 4px; line-height: 1.45; }
+      .msg .txt .ok { color: #34d399; font-weight: 600; }
+      .pill { display: inline-block; padding: 4px 14px; border-radius: 8px; background: #1e293b; font-family: 'JetBrains Mono'; font-size: 22px; margin: 4px 4px 0 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="49.9" data-width="1920" data-height="1080">
+      <div class="bg"></div><div class="glow g1"></div><div class="glow g2"></div>
+      <!-- discord chrome overlay (all scenes) -->
+      <div class="dc-blur"><div class="dc-logo">J</div><div class="dc-name">Jarrotv2 <span style="color:#5865F2;font-size:20px;">APP</span></div></div>
+
+      <!-- S1 0-6.3 HOOK -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="6.3" data-track-index="0">
+        <div class="kicker">The NFT Drop Problem</div>
+        <h1>Every drop comes down<br>to <span class="grad">seconds</span>.</h1>
+        <div class="sub">Humans click too slow. RPCs pick the wrong endpoint. Phases change mid-fight.</div>
+      </div>
+
+      <!-- S2 6.3-12.7 MEET -->
+      <div id="s2" class="scene clip" data-start="6.3" data-duration="6.4" data-track-index="1">
+        <div class="chat">
+          <div class="chead"># nft-drops</div>
+          <div class="cbody">
+            <div class="msg"><div class="avatar">J</div><div><div class="name">Jarrotv2 <span style="background:#5865F2;border-radius:6px;padding:2px 10px;font-size:18px;color:#fff;">BOT</span> <span style="color:#6d6f78;font-size:22px;">today at 8:00 PM</span></div>
+            <div class="txt">👁 <b>SNIPE ARMED</b> — targeting <b>SIGNED_PRESALE</b><br><span class="pill">wallet #1</span><span class="pill">qty 1</span><span class="pill">FREE</span><br><span class="ok">✓ MINT SUKSES</span> — receipt 0x1 · 1437ms T-0</div></div></div>
+          </div>
+        </div>
+        <div class="sub" style="margin-top:36px;">Meet <b style="color:#e2e8f0;">Jarrotv2</b> — a Discord-native NFT sniper that never sleeps.</div>
+      </div>
+
+      <!-- S3 12.7-21.0 SPEED -->
+      <div id="s3" class="scene clip" data-start="12.7" data-duration="8.3" data-track-index="2">
+        <div class="kicker">Execution Engine</div>
+        <h2 style="margin-bottom:40px;">Race to <span class="grad">every RPC</span>.</h2>
+        <div class="metrics">
+          <div class="metric"><div><span class="before">22.5s</span> <span class="arrow">→</span> <span class="after">4.5s</span></div><div class="lbl">snipe cold → hot</div></div>
+          <div class="metric"><div><span class="before">16s</span> <span class="arrow">→</span> <span class="after">1.5s</span></div><div class="lbl">eligibility check</div></div>
+          <div class="metric"><div><span class="after">1 RPC</span></div><div class="lbl">T-0 broadcast</div></div>
+        </div>
+      </div>
+
+      <!-- S4 21.0-32.4 PHASE INTEL -->
+      <div id="s4" class="scene clip" data-start="21" data-duration="11.4" data-track-index="3">
+        <div class="kicker">Phase Intelligence</div>
+        <h2 style="margin-bottom:44px;">It reads the phases <span class="grad">before you do</span>.</h2>
+        <div class="cards">
+          <div class="card"><div class="icon">🎯</div><h3>Allocation Check</h3><p>Eligible ≠ available. minterQuantityMinted is checked — dead phases get skipped, not fired at.</p></div>
+          <div class="card"><div class="icon">🛰️</div><h3>Pre-sign T-30</h3><p>Calldata, nonce and fees locked 30s before open. T-0 is one raw transaction.</p></div>
+          <div class="card"><div class="icon">⚡</div><h3>Blind Broadcast</h3><p>No freshness checks in the final second. 200ms late = gone. Revert beats missing.</p></div>
+        </div>
+      </div>
+
+      <!-- S5 32.4-43.8 RELIABILITY -->
+      <div id="s5" class="scene clip" data-start="32.4" data-duration="11.4" data-track-index="4">
+        <div class="kicker">Battle-Tested</div>
+        <h2 style="margin-bottom:44px;">Every failure became a <span class="grad">guardrail</span>.</h2>
+        <div class="cards">
+          <div class="card"><div class="icon">🧪</div><h3>12-Point Smoke Gate</h3><p>Syntax, handlers, RPC, clock-skew — all green before any deploy.</p></div>
+          <div class="card"><div class="icon">🛡️</div><h3>Retry Classifier</h3><p>Real API error strings tested. "Too Many Requests" retries, never kills the run.</p></div>
+          <div class="card"><div class="icon">chains</div><h3>6 Chains</h3><p>Robinhood · Ethereum · Base · Ink · Hyperliquid · Solana-ready.</p></div>
+        </div>
+      </div>
+
+      <!-- S6 43.8-49.9 CTA -->
+      <div id="s6" class="scene clip" data-start="43.8" data-duration="6.1" data-track-index="5">
+        <div class="dc-logo" style="width:120px;height:120px;border-radius:32px;font-size:64px;margin-bottom:40px;">J</div>
+        <h1>Jarrot<span class="grad">v2</span></h1>
+        <div class="sub" style="font-size:40px;margin-top:24px;">Built for the drop. <b style="color:#34d399;">Proven on-chain.</b></div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // S1
+      tl.fromTo("#s1 .kicker", {opacity:0}, {opacity:1, duration:.5}, 0.2);
+      tl.fromTo("#s1 h1", {opacity:0, y:44}, {opacity:1, y:0, duration:.9, ease:"power3.out"}, 0.3);
+      tl.fromTo("#s1 .sub", {opacity:0, y:22}, {opacity:1, y:0, duration:.6}, 1.2);
+      tl.to("#s1", {opacity:0, duration:.4}, 5.9);
+      // S2
+      tl.fromTo("#s2", {opacity:0}, {opacity:1, duration:.4}, 6.3);
+      tl.fromTo("#s2 .chat", {opacity:0, y:36, scale:.97}, {opacity:1, y:0, scale:1, duration:.7, ease:"power2.out"}, 6.5);
+      tl.fromTo("#s2 .msg", {opacity:0, x:-20}, {opacity:1, x:0, duration:.5}, 7.2);
+      tl.fromTo("#s2 .sub", {opacity:0}, {opacity:1, duration:.6}, 8.4);
+      tl.to("#s2", {opacity:0, duration:.4}, 12.3);
+      // S3
+      tl.fromTo("#s3", {opacity:0}, {opacity:1, duration:.4}, 12.7);
+      tl.fromTo("#s3 .kicker", {opacity:0}, {opacity:1, duration:.4}, 12.9);
+      tl.fromTo("#s3 h2", {opacity:0, y:30}, {opacity:1, y:0, duration:.6}, 13.1);
+      tl.fromTo("#s3 .metric", {opacity:0, y:28}, {opacity:1, y:0, duration:.55, stagger:.4, ease:"power2.out"}, 13.9);
+      tl.to("#s3", {opacity:0, duration:.4}, 20.6);
+      // S4
+      tl.fromTo("#s4", {opacity:0}, {opacity:1, duration:.4}, 21);
+      tl.fromTo("#s4 .kicker", {opacity:0}, {opacity:1, duration:.4}, 21.2);
+      tl.fromTo("#s4 h2", {opacity:0, y:30}, {opacity:1, y:0, duration:.6}, 21.4);
+      tl.fromTo("#s4 .card", {opacity:0, y:38}, {opacity:1, y:0, duration:.6, stagger:.45, ease:"power2.out"}, 22.2);
+      tl.to("#s4", {opacity:0, duration:.4}, 32);
+      // S5
+      tl.fromTo("#s5", {opacity:0}, {opacity:1, duration:.4}, 32.4);
+      tl.fromTo("#s5 .kicker", {opacity:0}, {opacity:1, duration:.4}, 32.6);
+      tl.fromTo("#s5 h2", {opacity:0, y:30}, {opacity:1, y:0, duration:.6}, 32.8);
+      tl.fromTo("#s5 .card", {opacity:0, y:38}, {opacity:1, y:0, duration:.6, stagger:.45, ease:"power2.out"}, 33.6);
+      tl.to("#s5", {opacity:0, duration:.4}, 43.4);
+      // S6
+      tl.fromTo("#s6", {opacity:0}, {opacity:1, duration:.5}, 43.8);
+      tl.fromTo("#s6 .dc-logo", {opacity:0, scale:.7}, {opacity:1, scale:1, duration:.6, ease:"back.out(1.6)"}, 44);
+      tl.fromTo("#s6 h1", {opacity:0, y:34}, {opacity:1, y:0, duration:.7, ease:"power3.out"}, 44.5);
+      tl.fromTo("#s6 .sub", {opacity:0, y:18}, {opacity:1, y:0, duration:.6}, 45.2);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
